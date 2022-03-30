@@ -18,7 +18,7 @@ try:
         query = server.query()
         print(f"Plugins: {query.software}\nPlayers: {' ; '.join(query.players.names)}")
     except:
-        print("Query not enabled on server.\n")
+        print("Cannot query server.\n")
 
 except:
-    print("Failed to get status.\n")
+    print("Failed to get status (server may be offline or non-existent).\n")
