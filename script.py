@@ -1,24 +1,35 @@
 #!/usr/bin/python3
 from mcstatus import JavaServer
 
-server_ip = input("\nMinecraft server IP (port not required.): ")
-port = 25565
-server = JavaServer(server_ip, port)
 
-try:
-    status = server.status()
-    amount_of_players = status.players.online
-    ping = server.ping()
-    version = status.version.name
-    message_of_the_day = status.description
-
-    print(f"\nPlayers online: {amount_of_players}\nLatency: {ping} ms\nVersion: {version}\n\nMOTD:\n{message_of_the_day}\n")
+def directCheck(ip, port):
+    server = JavaServer(ip, port)
 
     try:
-        query = server.query()
-        print(f"Plugins: {query.software}\nPlayers: {' ; '.join(query.players.names)}")
-    except:
-        print("Cannot query server.\n")
+        status = server.status()
+        ping = server.ping()
+        version = status.version.name
 
-except:
-    print("Failed to get status (server may be offline or non-existent).\n")
+        players_online = status.players.online
+        players_max = status.players.max
+        player_list = status.players.sample
+        message_of_the_day = status.description
+
+
+        print(f"\nPlayers online: {players_online}/{players_max}\nLatency: {ping} ms\nVersion: {version}\n\nMOTD:\n{message_of_the_day}\n")
+
+        #I am not proud of this
+        print("Players: ", end="")
+        if player_list is not None:
+            for player in player_list:
+                print(f"{player.name}", end=" ; ")
+        else:
+            print("No players online.")
+
+        print("\n")
+
+    except:
+        print("Failed to get status (server may be offline, non-existent or you may be banned).\n")
+
+
+directCheck(input("\nMinecraft server IP (port not required.): "), 25565)
