@@ -1,26 +1,24 @@
 #!/usr/bin/python3
 from mcstatus import JavaServer
 
-port = 25565
 
-
-def directCheck(ip):
+def directCheck(ip, port):
     server = JavaServer(ip, port)
 
     try:
-        status = server.status()
 
         try:
             ping = server.ping()
         except:
             ping = "???"
 
-        version = status.version.name
+        status = server.status()
 
         players_online = status.players.online
         players_max = status.players.max
         player_list = status.players.sample
         message_of_the_day = status.description
+        version = status.version.name
 
         print(f"\nPlayers online: {players_online}/{players_max}\nLatency: {ping} ms\nVersion: {version}\n\nMOTD:\n{message_of_the_day}\n")
 
@@ -38,4 +36,4 @@ def directCheck(ip):
         print("Failed to get status (connection may have been refused).\n")
 
 
-directCheck(input("\nMinecraft server IP: "))
+directCheck(input("\nMinecraft server IP: "), int(input("\nPort: ")))
